@@ -107,6 +107,10 @@ snippet my.DB__FTReporting
 	sql2 = gsub(sql,pattern = '\t|\n',replacement = ' ',ignore.case = TRUE );
 	df = sqlQuery(fto,sql2 , stringsAsFactors=FALSE)
 	
+snippet my.DB__Read SQL to Console
+	qry <- readLines('c:/delete_me/x.sql') ; qry 
+	format(data.frame(qry),justify = "left")
+
 snippet my.DB__lf_lf_Tbl
 	lf_Tbl
 snippet my.DB__lf_lf_View
