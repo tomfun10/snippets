@@ -94,8 +94,15 @@ snippet my.Utilities Pad out unequal length cols in list to data.frame
 
 # Package Development 
 snippet my.PckDev.Tips_ifPackageNotAvail 
-	eg if (!require("DT")) install.packages('DT')
+	eg1 
+	wants <- c("DescTools")
+	has   <- wants %in% rownames(installed.packages())
+	if(any(!has)) install.packages(wants[!has])
+
+	eg2 
+	if (!require("DT")) install.packages('DT')
 	devtools::session_info('DT')
+
 #---
 
 snippet my.DB__FTReporting
@@ -231,5 +238,89 @@ snippet my.EDA_Find.All.Uniq.Values.DBase.Columns
 	lst[sapply(lst,is.factor)]=sapply(lst[sapply(lst,is.factor)],as.character);lapply(lapply(lst,unique),head,lstMax)->Fnd.uniq.values.in.Columns
 	Fnd.uniq.values.in.Columns
 	sapply(Fnd.uniq.values.in.Columns,'[',seq(max(sapply(Fnd.uniq.values.in.Columns,length))))[,]
+
+snippet my.DisplayUtil_scientificNotation_getRid
+	options(scipen=999)
+
+snippet my.XL.dataInterChange
+	library(DescTools);library(RDCOMClient)
+	
+	#Read in one or many blocks of Excel cells, just select blocks of Excel cells run this function and they will be loaded to df
+	df=DescTools::XLGetRange(header = TRUE)
+	
+	#Write a semi-colon delimited data block in R to Excel
+	DescTools::XLView(df)
+
+snippet my.ggplot2 seven_layers_grammar_of_graphics
+	ggplot(data = <DATA>) + 
+	<GEOM_FUNCTION>(
+									mapping = aes(<MAPPINGS>),
+									stat = <STAT>, 
+									position = <POSITION>
+	) +
+	<COORDINATE_FUNCTION> +
+	<FACET_FUNCTION>
+
+snippet my.ggplot2 key attributes
+	#Rotate Y axis 90 degrees
+	theme(axis.text.x = element_text(angle=90,size = 7)) +
+	
+	#Finer date range on X axis
+	scale_x_date(date_breaks = 'week', date_minor_breaks = 'day')
+	#free scales on x and y axis
+	facet_wrap(~variable,ncol=1, scales='free_y')
+
+snippet my.model.project.structure 
+	library(tidyverse); library(DescTools);library(RODBC)
+
+	# Generic Function to retrieve ft data
+	getFT_Reporting <- function(FT_sql) {
+	  fto = odbcConnect("ODBC64_FTrack_2016",uid="GRMS",pwd="Password1");
+	  sql2 = gsub(FT_sql ,pattern = '\t|\n',replacement = ' ',ignore.case = TRUE );
+	  return(sqlQuery(fto,sql2 , stringsAsFactors=FALSE))
+	}
+	
+	# Generic Draw Plots Function 
+	DrawPlot <- function(quotedPlotDefinition) {  eval(parse(text = quotedPlotDefinition))}
+	
+	# Create a List to hold all key reporting structures: SQLs , Data, plots 
+	ft=list()
+	
+	ft[['sql']]     = list()
+	ft[['data']]    = list()
+	ft[['plots']]   = list()
+	
+	# SQL 
+	ft[['sql']][['sql_track']]    = ' Select * from track'
+	ft[['sql']][['sql_person']]   = ' Select top 100 * from Person'
+	
+	# Data
+	ft[['data']][['data_track']]   = getFT_Reporting(ft$sql$sql_track)
+	ft[['data']][['data_person']]  = getFT_Reporting(ft$sql$sql_person)
+	
+	# Write plot defintions for base plots 
+	ft[['plots']][['track']]   = "plot(ft[['data']][['data_track']]$IsActive  ~  ft[['data']][['data_track']]$IsTier3Track)"
+	ft[['plots']][['person']]  = "plot(ft[['data']][['data_person']]$MemberNumber ~ ft[['data']][['data_person']]$DateOfBirth)"
+	
+	# Write plot defintions for ggplots -- simpler treatment, ggplot is directly saved and accessible as a plot  
+	ft[['plots']][['person2']] = 
+	  ggplot(ft[['data']][['data_person']]) + 
+	  geom_point(aes(MemberNumber , DateOfBirth))   
+	  
+	  
+	# Draw plot defintions for base plots
+	DrawPlot(ft[['plots']][['track']])
+	DrawPlot(ft[['plots']][['person']])
+	
+	#or 
+	ft[['plots']]$track    %>% DrawPlot()
+	ft[['plots']]$person   %>% DrawPlot()
+	
+	#or 
+	ft$plots$track         %>% DrawPlot()
+	ft$plots$person        %>% DrawPlot()
+	
+	# Draw plot defintions for ggplots - Refer directly to plot  
+	ft[['plots']][['person2']]
 
 #---
