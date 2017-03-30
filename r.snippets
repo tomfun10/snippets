@@ -270,6 +270,9 @@ snippet my.ggplot2 key attributes
 	#free scales on x and y axis
 	facet_wrap(~variable,ncol=1, scales='free_y')
 
+snippet my.copy.any.comma.sep.frame.into.windows
+	df = read.table(file = 'clipboard',sep = '\t',header = TRUE, stringsAsFactors = FALSE)
+
 snippet my.model.project.structure 
 	library(tidyverse); library(DescTools);library(RODBC)
 
@@ -323,4 +326,60 @@ snippet my.model.project.structure
 	# Draw plot defintions for ggplots - Refer directly to plot  
 	ft[['plots']][['person2']]
 
-#---
+snippet my.Options_r 
+	options(scipen = 100 )
+
+snippet my.describe.data.variables 
+	library(DescTools)
+	
+	Freq(iris$Sepal.Length 
+	     ,useNA = 'always' 
+	     ,breaks = c(-Inf,seq(1,10,by=0.5),Inf) 
+	    ) -> xx ; xx
+	
+	Desc(iris$Sepal.Length
+	     ,useNA = 'always'
+	     ,breaks = c(-Inf,seq(1,10,by=0.5),Inf) 
+	) -> xx ; xx
+	
+	# Write Level labels directly 
+	xx$level = 1:21
+	
+	
+	VectorSeq     = c(-Inf,seq(1,10,by=0.5),Inf)
+	VectorSeqLab  = as.character(VectorSeq)
+	VectorSeqLabLagged = Hmisc::Lag(VectorSeqLab , shift = 1)
+	
+	# Embryonic generate attractive labels 
+	Lab = 
+	  paste0(
+	  VectorSeqLabLagged
+	  ,'>='
+	  ,VectorSeqLab
+	  )  ; Lab
+
+snippet my.plot.base.r.xAxis.dates 
+	plot.new() 
+	
+	dateSeq1     = seq.Date(from = Sys.Date(),by = '6 days',length.out = 21)
+	valuesToPlot = 1:length(dateSeq1) 
+	
+	plot.new()
+	# svg(filename = 'd:/delete_me/x.svg')
+	
+	plot(
+	  ,x=dateSeq1
+	  ,y=valuesToPlot
+	  ,xaxt="n"
+	)
+	axis.Date(
+	  side = 1
+	  ,las = 2
+	  ,at=dateSeq1
+	  ,format = '%a %d %b %Y'
+	)
+
+snippet my.iris.ir 
+	ir=iris; names(ir)= c('sl' , 'sw' , 'pl' , 'pw' , 's')
+
+#================================================================
