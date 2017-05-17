@@ -103,6 +103,30 @@ snippet my.PckDev.Tips_ifPackageNotAvail
 	devtools::session_info('DT')
 
 #---
+snippet my.DB_myAzureTest_Data_base 
+library(RODBC)
+
+driver.name <- "{ODBC Driver 13 for SQL Server}"
+db.name <- "sql2016"
+server <- "sql-srv-2016.database.windows.net"
+port <-"1433"
+user.name <-"tom"
+pwd <- "test2016SQL"
+
+# Use a full connection string to connect to a SAMPLE database
+con.text <- paste("DRIVER=",driver.name,
+									";Database=",db.name,
+									";server=",server,
+									";Port=",port,
+									";PROTOCOL=TCPIP",
+									";UID=", user.name,
+									";PWD=",pwd,sep="")
+
+fto <- odbcDriverConnect(con.text)
+sqlQuery(fto, "select * from test")
+
+#---
+
 snippet my.DB__FTReporting2_ODBC_direct 
 library(RODBC) 
 
