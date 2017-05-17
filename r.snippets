@@ -84,7 +84,6 @@ snippet rapply
 
 snippet ts
 	`r paste("#", date(), "------------------------------\n")`
-	
 
 #================================================================
 
@@ -102,6 +101,29 @@ snippet my.PckDev.Tips_ifPackageNotAvail
 	eg2 
 	if (!require("DT")) install.packages('DT')
 	devtools::session_info('DT')
+
+#---
+snippet my.DB__FTReporting2_ODBC_direct 
+library(RODBC) 
+
+driver.name <- "{ODBC Driver 13 for SQL Server}"
+db.name <- "FastTrackReporting"
+server <- "emnu0fogx7.database.windows.net"
+port <-"1433"
+user.name <-"GRMS"
+pwd <- "Password1"
+
+# Use a full connection string to connect to Fast Track Reporting
+con.text <- paste("DRIVER=",driver.name,
+									";Database=",db.name,
+									"server=",server,
+									";PROTOCOL=TCPIP",
+									";Port=",port,
+									";UID=", user.name,
+									";PWD=",pwd,sep="")
+
+fto <- odbcDriverConnect(con.text)
+sqlQuery(fto, "select * from track")
 
 #---
 
