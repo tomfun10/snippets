@@ -162,7 +162,21 @@ snippet my.DB__FTReporting
 	
 snippet my.DB__Read SQL to Console
 	qry <- readLines('c:/delete_me/x.sql') ; qry 
-	format(data.frame(qry),justify = "left")
+	format(data.frame(qry),justify = "left") 
+	
+snippet my.DB__FTReporting_new_ODBC_driver
+	library(odbc); library(dplyr); library(dbplyr)
+	fto = dbConnect(odbc::odbc(), "ODBC64_FTrack_2016" ,uid="GRMS",pwd="Password1");
+	
+	sql= "
+	select * from information_schema.tables
+	"
+	sql2 = gsub(sql,pattern = '\t|\n',replacement = ' ',ignore.case = TRUE );
+	
+	df= odbc::dbGetQuery(conn = fto, statement = sql2)
+	
+	odbc::dbDisconnect(fto)
+
 
 snippet my.DB__lf_lf_Tbl
 	lf_Tbl
