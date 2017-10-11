@@ -174,7 +174,7 @@ snippet my.CopyPaste_ClipBoardReadFrom_ConvertDates_d/m/Y
 	dateFormats ="%d/%m/%Y"
 	dfx = read.table("clipboard",sep="\t",header=TRUE,stringsAsFactors=FALSE)
 	DatesNames = names(dfx[sapply(dfx, function(x) !all(is.na(as.Date(as.character(x),format=dateFormats))))])
-	lapply(dfx[,DatesNames,drop=FALSE],as.Date,"%d/%m/%Y")
+	lapply(dfx[,DatesNames,drop=FALSE],as.Date,"%d/%m/%Y")      
 	dfx[,DatesNames]=lapply(dfx[,DatesNames,drop=FALSE],as.Date,format=dateFormats)
 	
 	NumericCols = names(dfx[sapply(dfx, function(x) !all(is.na(as.numeric(x))))])
@@ -236,7 +236,7 @@ snippet my.ggplot2 seven_layers_grammar_of_graphics
 
 snippet my.ggplot2 key attributes
 	#Rotate Y axis 90 degrees
-	theme(axis.text.x = element_text(angle=90,size = 7)) +
+	theme(axis.text.x = element_text(angle=90,size = 7,vjust = 0, hjust = 1)) +
 	
 	#Finer date range on X axis
 	scale_x_date(date_breaks = 'week', date_minor_breaks = 'day')
